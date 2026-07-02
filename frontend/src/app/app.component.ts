@@ -8,11 +8,12 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   template: `
     <div class="app-shell">
       <header class="app-header">
-        <a class="brand" routerLink="/explore">
+        <a class="brand" routerLink="/">
           <span class="brand-mark">CP</span>
           <span class="brand-text">CareerPath<em>AI</em></span>
         </a>
         <nav class="app-nav">
+          <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
           <a routerLink="/explore" routerLinkActive="active">Explore Careers</a>
           <a routerLink="/advisor" routerLinkActive="active">AI Advisor</a>
         </nav>
