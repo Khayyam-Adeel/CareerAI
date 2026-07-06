@@ -24,6 +24,20 @@ public interface IDegreeRepository
 }
 
 /// <summary>
+/// Abstraction over user account storage. Implemented against EF Core + SQL Server
+/// (see CareerPathAI.Persistence/Repositories/EfUserRepository.cs) - the first real
+/// database-backed repository in this codebase.
+/// </summary>
+public interface IUserRepository
+{
+    Task<bool> EmailExistsAsync(string email);
+    Task<User?> GetByEmailAsync(string email);
+    Task<User?> GetByIdAsync(int id);
+    Task AddAsync(User user);
+    Task UpdateAsync(User user);
+}
+
+/// <summary>
 /// Abstraction over an external LLM used to re-rank and explain advisor recommendations
 /// in natural language. Implemented today against Gemini (free tier) - see
 /// Infrastructure/ExternalServices/Gemini/GeminiAiRecommenderClient.cs.

@@ -22,5 +22,15 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/ai-advisor/ai-advisor.component').then(m => m.AiAdvisorComponent)
   },
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./features/auth/login/login.component').then(m => m.LoginComponent)
+  },
+  {
+    path: 'register',
+    loadComponent: () =>
+      import('./features/auth/register/register.component').then(m => m.RegisterComponent)
+  },
   { path: '**', redirectTo: 'explore' }
 ];

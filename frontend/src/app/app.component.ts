@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { AuthService } from './core/services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +18,15 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
           <a routerLink="/explore" routerLinkActive="active">Explore Careers</a>
           <a routerLink="/advisor" routerLinkActive="active">AI Advisor</a>
         </nav>
+        <div class="app-auth">
+          @if (auth.isAuthenticated()) {
+            <span class="auth-greeting">Hi, {{ auth.currentUser()?.firstName }}</span>
+            <button type="button" class="auth-logout" (click)="logout()">Log out</button>
+          } @else {
+            <a routerLink="/login" routerLinkActive="active" class="auth-link">Log in</a>
+            <a routerLink="/register" class="auth-signup">Sign up</a>
+          }
+        </div>
       </header>
 
       <main class="app-main">
@@ -29,6 +39,60 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
     </div>
   `,
   styles: [`
+    .app-auth {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+
+    .auth-greeting {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--color-ink);
+    }
+
+    .auth-logout {
+      background: transparent;
+      border: 1px solid var(--color-border);
+      color: var(--color-slate);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.45rem 0.85rem;
+      border-radius: var(--radius-sm);
+      transition: border-color 0.15s ease, color 0.15s ease;
+    }
+
+    .auth-logout:hover {
+      border-color: var(--color-danger);
+      color: var(--color-danger);
+    }
+
+    .auth-link {
+      text-decoration: none;
+      color: var(--color-slate);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .auth-link:hover, .auth-link.active {
+      color: var(--color-ink);
+    }
+
+    .auth-signup {
+      text-decoration: none;
+      background: var(--color-ink);
+      color: var(--color-paper);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.5rem 0.95rem;
+      border-radius: var(--radius-sm);
+      transition: background 0.15s ease;
+    }
+
+    .auth-signup:hover {
+      background: var(--color-teal);
+    }
+
     .app-shell {
       min-height: 100vh;
       display: flex;
@@ -136,7 +200,18 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
       .app-nav {
         gap: 1rem;
       }
+      .auth-greeting {
+        display: none;
+      }
     }
   `]
 })
-export class AppComponent {}
+export class AppComponent {
+  protected readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
+
+  logout(): void {
+    this.auth.logout();
+    this.router.navigateByUrl('/');
+  }
+}
